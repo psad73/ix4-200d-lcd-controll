@@ -1,3 +1,4 @@
+# disk smart status
 import subprocess
 import glob
 import os

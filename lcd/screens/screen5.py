@@ -1,3 +1,4 @@
+# system load, memory, fan rpm
 import subprocess
 
 

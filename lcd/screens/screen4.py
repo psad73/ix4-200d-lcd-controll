@@ -1,3 +1,4 @@
+# device temp, disk temp
 import glob
 import subprocess
 import re

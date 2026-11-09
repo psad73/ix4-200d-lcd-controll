@@ -1,3 +1,4 @@
+# hostname, ip addresses, uptime
 import subprocess
 
 
