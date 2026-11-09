@@ -1,5 +1,29 @@
 # hostname, ip addresses, uptime
+import re
 import subprocess
+
+CONFIG_PATH = "/etc/ix4-lcd.conf"
+DEFAULT_INTERFACES = {
+    "LAN_INTERFACE": "br-lan",
+    "WIFI_INTERFACE": "phy0-sta0",
+}
+_INTERFACE_NAME = re.compile(r"^[A-Za-z0-9_.:-]+$")
+
+
+def get_interfaces():
+    interfaces = DEFAULT_INTERFACES.copy()
+    try:
+        with open(CONFIG_PATH, encoding="utf-8") as config:
+            for line in config:
+                line = line.partition("#")[0].strip()
+                if "=" not in line:
+                    continue
+                key, value = (part.strip() for part in line.split("=", 1))
+                if key in interfaces and _INTERFACE_NAME.fullmatch(value):
+                    interfaces[key] = value
+    except OSError:
+        pass
+    return interfaces
 
 
 def get_ipv4(interface):
@@ -32,10 +56,11 @@ def get_uptime():
 
 
 def get_lines():
+    interfaces = get_interfaces()
     return [
         "Pupka - status",
-        "LAN: " + (get_ipv4("br-lan") or "no IPv4"),
-        "WiFi: " + (get_ipv4("phy0-sta0") or "waiting..."),
+        "LAN: " + (get_ipv4(interfaces["LAN_INTERFACE"]) or "no IPv4"),
+        "WiFi: " + (get_ipv4(interfaces["WIFI_INTERFACE"]) or "waiting..."),
         "Uptime: " + get_uptime(),
     ]
 
@@ -59,8 +84,9 @@ def draw_wifi(draw, x, y):
 
 
 def draw_screen(image, draw, font):
-    lan = get_ipv4("br-lan") or "no IPv4"
-    wifi = get_ipv4("phy0-sta0") or "waiting..."
+    interfaces = get_interfaces()
+    lan = get_ipv4(interfaces["LAN_INTERFACE"]) or "no IPv4"
+    wifi = get_ipv4(interfaces["WIFI_INTERFACE"]) or "waiting..."
     uptime = get_uptime()
 
     draw.text((1, 1), "Pupka - status", font=font, fill=1)

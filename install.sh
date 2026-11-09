@@ -1,12 +1,11 @@
-Attempting to perform the InitializeDefaultDrives operation on the 'FileSystem' provider failed.
 #!/bin/sh
-# Conservative symlink installer for ix4-200d LCD control.
-# Default is preview only. Use --apply to create links.
+# Conservative installer for ix4-200d LCD control.
+# Default is preview only. Use --apply to create links and the initial config.
 set -eu
 
 usage() {
     echo "Usage: $0 [--apply]"
-    echo "Without --apply, print the planned symlinks without changing files."
+    echo "Without --apply, print planned changes without changing files."
 }
 
 apply=0
@@ -18,7 +17,7 @@ case "${1-}" in
 esac
 
 if [ "$apply" -eq 1 ] && [ "$(id -u)" -ne 0 ]; then
-    echo "Run with root privileges to apply links." >&2
+    echo "Run with root privileges to apply installation." >&2
     exit 1
 fi
 
@@ -28,6 +27,13 @@ case "$SCRIPT_PATH" in
     *) SCRIPT_PATH=$(command -v "$SCRIPT_PATH") ;;
 esac
 REPO_DIR=$(CDPATH= cd -- "$(dirname -- "$SCRIPT_PATH")" && pwd -P)
+CONFIG_SOURCE="$REPO_DIR/config/ix4-lcd.conf"
+CONFIG_DEST=/etc/ix4-lcd.conf
+
+if [ ! -f "$CONFIG_SOURCE" ]; then
+    echo "ERROR: missing repository config: $CONFIG_SOURCE" >&2
+    exit 1
+fi
 
 # Source path : system path. Links point into this repository checkout.
 set -- \
@@ -82,13 +88,19 @@ while [ "$#" -gt 0 ]; do
     echo "WOULD LINK: $destination -> $source_path"
 done
 
+if [ -e "$CONFIG_DEST" ] || [ -L "$CONFIG_DEST" ]; then
+    echo "KEEP: $CONFIG_DEST already exists; it will not be changed"
+else
+    echo "WOULD CREATE: $CONFIG_DEST from config/ix4-lcd.conf (only if absent)"
+fi
+
 if [ "$conflicts" -gt 0 ]; then
     echo "$conflicts conflict(s) or missing prerequisite(s); conflicting paths were not changed." >&2
     exit 1
 fi
 
 if [ "$apply" -eq 0 ]; then
-    echo "Preview only. Re-run with --apply as root to create links."
+    echo "Preview only. Re-run with --apply as root to install."
 else
     mkdir -p /usr/lib/ix4-lcd/screens
     set -- \
@@ -119,6 +131,16 @@ else
             echo "LINKED: $destination -> $source_path"
         fi
     done
+
+    if (set -C; : > "$CONFIG_DEST") 2>/dev/null; then
+        cat "$CONFIG_SOURCE" > "$CONFIG_DEST"
+        chmod 644 "$CONFIG_DEST"
+        echo "CREATED: $CONFIG_DEST"
+    elif [ -e "$CONFIG_DEST" ] || [ -L "$CONFIG_DEST" ]; then
+        echo "KEPT: $CONFIG_DEST already exists"
+    else
+        echo "ERROR: could not create $CONFIG_DEST" >&2
+        exit 1
+    fi
     echo "Links created. No services were enabled, started, or restarted."
 fi
-
