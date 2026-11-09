@@ -41,6 +41,7 @@ set -- \
     "lcd/screens/screen5.py:/usr/lib/ix4-lcd/screens/screen5.py" \
     "media/logo.png:/usr/lib/ix4-lcd/screens/logo.png" \
     "buttons/BTN_0:/etc/rc.button/BTN_0" \
+    "buttons/BTN_1:/etc/rc.button/BTN_1" \
     "buttons/power:/etc/rc.button/power" \
     "buttons/reboot:/etc/rc.button/reboot" \
     "init/ix4-lcd:/etc/init.d/ix4-lcd" \
@@ -101,6 +102,7 @@ else
         "lcd/screens/screen5.py:/usr/lib/ix4-lcd/screens/screen5.py" \
         "media/logo.png:/usr/lib/ix4-lcd/screens/logo.png" \
         "buttons/BTN_0:/etc/rc.button/BTN_0" \
+        "buttons/BTN_1:/etc/rc.button/BTN_1" \
         "buttons/power:/etc/rc.button/power" \
         "buttons/reboot:/etc/rc.button/reboot" \
         "init/ix4-lcd:/etc/init.d/ix4-lcd" \
