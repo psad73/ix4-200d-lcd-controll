@@ -1,0 +1,20 @@
+#!/bin/sh /etc/rc.common
+
+STOP=99
+
+stop() {
+    local pid
+    local pidfile="/var/run/ix4-lcd.pid"
+
+    [ -r "$pidfile" ] || return 0
+    read -r pid < "$pidfile"
+
+    case "$pid" in
+        ''|*[!0-9]*) return 0 ;;
+    esac
+
+    kill -ALRM "$pid" 2>/dev/null
+    sleep 3
+    logger -t ix4-lcd "Final power-off message requested"
+    return 0
+}

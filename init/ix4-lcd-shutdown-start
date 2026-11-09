@@ -1,0 +1,19 @@
+#!/bin/sh /etc/rc.common
+
+STOP=01
+
+stop() {
+    local pid
+    local pidfile="/var/run/ix4-lcd.pid"
+
+    [ -r "$pidfile" ] || return 0
+    read -r pid < "$pidfile"
+
+    case "$pid" in
+        ''|*[!0-9]*) return 0 ;;
+    esac
+
+    kill -USR2 "$pid" 2>/dev/null
+    logger -t ix4-lcd "Shutdown-start message requested"
+    return 0
+}

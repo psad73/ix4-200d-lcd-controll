@@ -1,0 +1,9 @@
+#!/bin/sh
+
+[ "${ACTION}" = "released" ] || exit 0
+
+logger "Front power button pressed. Initiating safe system poweroff..."
+sync
+exec /sbin/poweroff
+
+return 0
