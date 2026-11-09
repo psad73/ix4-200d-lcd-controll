@@ -1,13 +1,2 @@
 #!/bin/sh
-[ "$ACTION" = "pressed" ] || exit 0
-
-PIDFILE=/var/run/ix4-lcd.pid
-[ -r "$PIDFILE" ] || exit 0
-
-read -r pid < "$PIDFILE"
-case "$pid" in
-    ''|*[!0-9]*) exit 0 ;;
-esac
-
-kill -USR1 "$pid" 2>/dev/null
-exit 0
+logger -t ix4-button-test "BUTTON=${BUTTON:-unknown} ACTION=${ACTION:-unknown}"
