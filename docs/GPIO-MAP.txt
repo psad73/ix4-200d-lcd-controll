@@ -1,0 +1,32 @@
+Attempting to perform the InitializeDefaultDrives operation on the 'FileSystem' provider failed.
+GPIO MAP — transcribed from lcd/lib/main.py
+==========================================
+
+Display size in controller: 128 × 64 pixels.
+
+Signal     Linux GPIO line
+RS         15
+A0         34
+CS         35
+RW         44
+E          45
+D0         36
+D1         37
+D2         38
+D3         39
+D4         40
+D5         41
+D6         42
+D7         43
+
+The program opens these using python-periphery GPIO(number, "out"). This table
+is transcribed from repository code; it was not independently measured or
+verified on a NAS in this review. GPIO numbering may vary by kernel, device tree,
+driver and library version. Confirm the mapping locally before running.
+
+Signals handled by the controller:
+SIGUSR1 — advance to next loaded screen
+SIGUSR2 — display shutdown-start message
+SIGALRM — display final power-off message
+SIGTERM and SIGINT — stop controller
+
