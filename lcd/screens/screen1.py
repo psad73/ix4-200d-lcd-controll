@@ -18,7 +18,7 @@ def clean_message(line):
     line = line.rstrip("\r\n")
     line = SYSLOG_PREFIX.sub("", line, count=1)
     line = ISO_PREFIX.sub("", line, count=1)
-    return line.strip()
+    return line.encode("ascii", "replace").decode("ascii").strip()
 
 
 def wrap_text(draw, text, font, max_width=126):
@@ -55,6 +55,11 @@ def wrap_text(draw, text, font, max_width=126):
 def recent_rows(draw, font, max_rows=5):
     try:
         with LOG_PATH.open("r", errors="replace") as log:
+            log.seek(0, 2)
+            size = log.tell()
+            log.seek(max(0, size - 8192))
+            if size > 8192:
+                log.readline()
             messages = deque(log, maxlen=20)
     except OSError:
         return ["Unable to read /var/log/messages"]
