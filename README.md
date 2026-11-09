@@ -23,8 +23,8 @@ The scripts expect an OpenWrt-like system with `/etc/rc.common`, `/etc/rc.button
 
 1. Copy or clone this repository to a persistent local path on the NAS. Init scripts point to the repository's absolute paths, so do not keep it on a removable or late-mounted data volume.
 2. Inspect `docs/FILE-MAPPING.txt` and make a separate backup of existing device files.
-3. Run `./install.sh` to preview. It makes no changes by default.
-4. If the preview is correct, run `./install.sh --apply` as root. It creates symlinks only for paths that do not already exist. Existing paths, including dangling or differently targeted symlinks, are conflicts and left alone.
+3. Run `sh install.sh` to preview. It makes no changes by default.
+4. If the preview is correct, run `sh install.sh --apply` as root. It creates symlinks only for paths that do not already exist. Existing paths, including dangling or differently targeted symlinks, are conflicts and left alone.
 5. Review links and script permissions. Enable or start services only after checking the local OpenWrt service behavior. The installer does not enable services, restart anything, edit rc.d ordering, or change the device's buttons or services.
 
 The installer creates `/usr/lib/ix4-lcd/screens` if needed after preflighting all link destinations. It does not move or copy this repository, back up device files, or overwrite existing targets. All symlink targets are derived from the checkout's location.
