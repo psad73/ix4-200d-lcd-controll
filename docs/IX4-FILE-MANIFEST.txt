@@ -1,0 +1,45 @@
+Attempting to perform the InitializeDefaultDrives operation on the 'FileSystem' provider failed.
+IX4 PROJECT FILE MANIFEST
+=========================
+
+Repository files present on public main branch, reviewed 2026-11-09:
+README.md
+install.sh                         empty at review
+backups/reboot.before-lcd-test     empty placeholder, not a usable backup
+buttons/BTN_0
+buttons/power
+buttons/reboot
+docs/GPIO-MAP.txt                 empty at review
+docs/IX4-FILE-MANIFEST.txt        empty at review
+docs/RESTORE-INSTRUCTIONS.txt     empty at review
+init/ix4-a-lcd-shutdown-final
+init/ix4-lcd
+init/ix4-lcd-shutdown-start
+lcd/ix4-lcd.py
+lcd/lib/main.py
+lcd/screens/screen0.py through screen5.py
+maintenance/.gitkeep
+media/logo.bmp
+media/logo.png
+
+Discussed in project history; physical presence is unverified:
+/etc/rc.d/K01ix4-lcd-shutdown-start
+/etc/rc.d/K99ix4-a-lcd-shutdown-final
+/etc/rc.d/K99ix4-lcd
+/root/reboot.before-lcd-test
+/usr/lib/ix4-lxd/screens/* (reported original logo location)
+Installed /etc/rc.button, /etc/init.d and /usr/bin paths
+
+Discussed but not confirmed as existing:
+/usr/bin/ix4-lcd.py.before-modular
+/usr/sbin/ix4-fstrim-check.sh
+/etc/init.d/ix4-fstrim
+/root/ix4-project/ directory structure
+
+Missing or unresolved:
+- No LICENSE file; reuse permissions are unstated.
+- No tested OpenWrt release or dependency/version matrix.
+- No verified device backup of original button/init files.
+- No NAS evidence confirming current paths, rc.d order or GPIO numbering.
+- Logo ownership and redistribution permission are unknown.
+

@@ -1,0 +1,37 @@
+Attempting to perform the InitializeDefaultDrives operation on the 'FileSystem' provider failed.
+IX4-200D LCD CONTROL — FILE MAPPING
+===================================
+
+Source paths are relative to the repository checkout. Installer links use the
+checkout's resolved absolute path, not a fixed /root path. Back up existing
+device files separately; the installer never overwrites a destination.
+
+Repository path                         Device path                                      Notes
+lcd/ix4-lcd.py                          /usr/bin/ix4-lcd.py                             Launcher
+lcd/lib/main.py                          /usr/lib/ix4-lcd/main.py                        Controller
+lcd/screens/screen0.py                   /usr/lib/ix4-lcd/screens/screen0.py             Screen module
+lcd/screens/screen1.py                   /usr/lib/ix4-lcd/screens/screen1.py             Screen module
+lcd/screens/screen2.py                   /usr/lib/ix4-lcd/screens/screen2.py             Screen module
+lcd/screens/screen3.py                   /usr/lib/ix4-lcd/screens/screen3.py             Screen module
+lcd/screens/screen4.py                   /usr/lib/ix4-lcd/screens/screen4.py             Screen module
+lcd/screens/screen5.py                   /usr/lib/ix4-lcd/screens/screen5.py             Screen module
+media/logo.png                           /usr/lib/ix4-lcd/screens/logo.png               Required exact path in screen2.py
+buttons/BTN_0                            /etc/rc.button/BTN_0                            Cycles screen with SIGUSR1
+buttons/power                            /etc/rc.button/power                            sync then /sbin/poweroff
+buttons/reboot                           /etc/rc.button/reboot                           Currently powers off; inspect before use
+init/ix4-lcd                             /etc/init.d/ix4-lcd                              LCD service
+init/ix4-lcd-shutdown-start              /etc/init.d/ix4-lcd-shutdown-start              Shutdown-start message
+init/ix4-a-lcd-shutdown-final            /etc/init.d/ix4-a-lcd-shutdown-final            Final message
+
+Runtime paths referenced by code (not links installed by this script):
+/var/run/ix4-lcd.pid                     PID file created and removed by controller
+/sys/class/hwmon/hwmon0/device/pwm3      Referenced by buttons/reboot; device-specific
+
+OpenWrt may require rc.d links or service enablement. The installer deliberately
+does not create or modify them. Confirm target firmware behavior before enabling.
+
+The owner reports that logo assets originated in /usr/lib/ix4-lxd/screens and
+were copied into media/. That history was not independently verified on the NAS.
+logo.bmp is retained but not referenced by current code. Asset licensing is
+unknown.
+

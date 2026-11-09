@@ -1,0 +1,39 @@
+Attempting to perform the InitializeDefaultDrives operation on the 'FileSystem' provider failed.
+RESTORE AND RECOVERY
+====================
+
+Before installation
+-------------------
+This repository was reviewed remotely, not on an ix4-200d. No NAS was changed.
+backups/reboot.before-lcd-test is empty and is not a recoverable backup. Before
+installing, make your own copies of every existing destination and record which
+services and rc.d links are enabled.
+
+Installer behavior
+------------------
+Run ./install.sh for a read-only preview. Run ./install.sh --apply as root only
+after reviewing the paths. It creates symlinks only when a destination is
+absent. Existing files, directories and links (including links to other
+targets) are conflicts and are never overwritten. It creates the controller and
+screens parent directory only after preflighting all link destinations. It does
+not change permissions, enable/restart services, or edit rc.d ordering.
+Moving/removing the checkout breaks its installed links.
+
+Manual recovery
+---------------
+1. Stop or disable only services you enabled for this project. Check local
+   OpenWrt documentation if uncertain.
+2. For each destination in FILE-MAPPING.txt, inspect it with ls -l and readlink.
+   Remove it only if it is a symlink pointing inside the exact checkout used for
+   installation. Never remove a regular file or a link to another target.
+3. Restore original files from your own pre-install copies. Do not use the empty
+   repository backup placeholder.
+4. Restore rc.d links or service state you changed, using your notes and the
+   target firmware's normal service management.
+5. Check that original LCD, button and shutdown behavior is back before reboot.
+
+The repository does not contain original copies of every device file, so a
+complete automated restore is not possible. This recovery procedure has not
+been tested on hardware. If a destination or former content is uncertain, stop
+and consult a local backup or device expert rather than deleting it.
+
