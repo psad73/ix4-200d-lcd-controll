@@ -1,0 +1,14 @@
+[Unit]
+Description=ix4-200d front panel buttons
+After=systemd-udev-trigger.service ix4-lcd.service
+Wants=ix4-lcd.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /opt/ix4-lcd-panel/debian/buttond.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
