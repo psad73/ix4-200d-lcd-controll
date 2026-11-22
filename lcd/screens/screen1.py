@@ -2,6 +2,7 @@
 from collections import deque
 from pathlib import Path
 import re
+import subprocess
 
 
 LOG_PATH = Path("/var/log/messages")
@@ -52,7 +53,7 @@ def wrap_text(draw, text, font, max_width=126):
     return rows
 
 
-def recent_rows(draw, font, max_rows=5):
+def read_recent_messages():
     try:
         with LOG_PATH.open("r", errors="replace") as log:
             log.seek(0, 2)
@@ -60,9 +61,30 @@ def recent_rows(draw, font, max_rows=5):
             log.seek(max(0, size - 8192))
             if size > 8192:
                 log.readline()
-            messages = deque(log, maxlen=20)
+            return list(deque(log, maxlen=20))
     except OSError:
-        return ["Unable to read /var/log/messages"]
+        pass
+
+    try:
+        result = subprocess.run(
+            ["journalctl", "-n", "20", "--no-pager", "-o", "short-iso"],
+            capture_output=True,
+            text=True,
+            timeout=3,
+            check=False,
+        )
+        if result.returncode == 0 and result.stdout:
+            return result.stdout.splitlines()
+    except (OSError, subprocess.TimeoutExpired):
+        pass
+
+    return []
+
+
+def recent_rows(draw, font, max_rows=5):
+    messages = read_recent_messages()
+    if not messages:
+        return ["No system messages"]
 
     rows = []
     for line in messages:

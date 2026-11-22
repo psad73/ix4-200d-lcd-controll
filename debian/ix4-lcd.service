@@ -1,0 +1,17 @@
+[Unit]
+Description=ix4-200d LCD controller
+After=local-fs.target systemd-networkd.service
+Wants=systemd-networkd.service
+
+[Service]
+Type=simple
+User=root
+Environment=IX4_LCD_SCREEN_DIR=/opt/ix4-lcd-panel/lcd/screens
+ExecStart=/usr/bin/python3 /opt/ix4-lcd-panel/lcd/lib/main.py
+ExecStop=/opt/ix4-lcd-panel/debian/stop-for-shutdown.sh ${MAINPID}
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=15
+
+[Install]
+WantedBy=multi-user.target

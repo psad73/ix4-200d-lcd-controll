@@ -29,7 +29,7 @@ D7 = GPIO(43, "out")
 DATA = [D7, D6, D5, D4, D3, D2, D1, D0]
 PINS = [RS, A0, CS, RW, E] + DATA
 
-SCREEN_DIR = "/usr/lib/ix4-lcd/screens"
+SCREEN_DIR = os.environ.get("IX4_LCD_SCREEN_DIR", "/usr/lib/ix4-lcd/screens")
 PIDFILE = "/var/run/ix4-lcd.pid"
 
 stopping = threading.Event()
