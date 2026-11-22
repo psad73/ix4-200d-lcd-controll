@@ -9,7 +9,7 @@ The repository supports both OpenWrt and Debian 12.
 - `buttons/` — OpenWrt button hotplug handlers.
 - `init/` — OpenWrt init scripts for LCD startup and shutdown messages.
 - `debian/` — Debian 12 systemd units, input-event listener, installer and configuration.
-- `media/` — `logo.png` and `logo.bmp`; screen 2 uses the PNG.
+- `media/` — retained logo assets.
 - `config/ix4-lcd.conf` — OpenWrt default network interface names.
 - `docs/` — file mapping, GPIO notes and recovery guidance.
 - `install.sh` — conservative OpenWrt installer.
@@ -41,6 +41,7 @@ systemd and the Linux input event device for front-panel buttons.
 ## Operation on OpenWrt
 
 - LCD service: `ix4-lcd`.
+- `BTN_0` restarts networking.
 - `BTN_1` sends SIGUSR1 to cycle screens.
 - Shutdown scripts request LCD messages with SIGUSR2 and SIGALRM.
 - The `power` button calls `sync` and `/sbin/poweroff`.
