@@ -147,10 +147,28 @@ def fit_text(draw, text, font, max_width=128):
     return text
 
 
+# Use a regular-weight system TTF font for clearer text on the 128x64 LCD.
+# Debian package: fonts-dejavu-core
+FONT_PATH = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+FONT_SIZE = 9
+
+
+def load_lcd_font():
+    try:
+        return ImageFont.truetype(FONT_PATH, FONT_SIZE)
+    except OSError:
+        print(
+            "LCD font not found at", FONT_PATH,
+            "- install fonts-dejavu-core; using Pillow default font",
+            flush=True,
+        )
+        return ImageFont.load_default()
+
+
 def render_lines(lines, plain=False):
     image = Image.new("1", (128, 64), 0)
     draw = ImageDraw.Draw(image)
-    font = ImageFont.load_default()
+    font = load_lcd_font()
 
     number, module = screens[screen_index] if screens else (None, None)
 
